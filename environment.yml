@@ -1,0 +1,14 @@
+name: animathor
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.10
+  - pip
+  - ffmpeg
+  - pip:
+      - manim>=0.18.0
+      - numpy>=1.24.0
+      - scipy>=1.10.0
+      - edge-tts>=6.1.0
+      - pillow>=10.0.0

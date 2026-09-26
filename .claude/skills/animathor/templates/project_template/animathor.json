@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "{{PROJECT_NAME}}",
+  "title": "{{PROJECT_TITLE}}",
+  "topic": "Mathematics & Science",
+  "format": "{{FORMAT}}",
+  "aspect_ratio": "{{ASPECT_RATIO}}",
+  "resolution": [{{WIDTH}}, {{HEIGHT}}],
+  "fps": 60,
+  "engine": "manimce",
+  "created_at": "{{DATE}}",
+  "paths": {
+    "storyboard": "storyboard.md",
+    "script": "script.py",
+    "assets": "assets",
+    "output": "output"
+  }
+}

@@ -1,0 +1,35 @@
+# Manim generated media and cache
+media/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# LaTeX temporary files
+*.aux
+*.dvi
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Video render outputs
+final.mp4
+concat.txt
+*.mov
+*.avi
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
