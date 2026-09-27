@@ -218,6 +218,7 @@ def main():
     # lint (Anti-Slop & Accuracy Quality Audit)
     lint_parser = subparsers.add_parser("lint", help="Audit storyboard or script against Anti-Slop & Accuracy standards")
     lint_parser.add_argument("file", help="Path to storyboard markdown or python script")
+    lint_parser.add_argument("--json", action="store_true", help="Output findings in structured JSON format")
 
     args = parser.parse_args()
 
@@ -233,7 +234,7 @@ def main():
         sys.exit(stitch_scenes(args.script, args.quality))
     elif args.command == "lint":
         from validate_script import ScriptValidator
-        validator = ScriptValidator(args.file)
+        validator = ScriptValidator(args.file, json_mode=args.json)
         sys.exit(0 if validator.audit() else 1)
 
 
