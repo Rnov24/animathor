@@ -47,8 +47,15 @@ Replace these hollow markers with concrete mathematical statements:
 
 ### 2.2 Punctuation & Rhetorical Rules
 - **Rule R-02 (Zero Em Dashes)**:
-  - The em dash character (`—`) is strictly forbidden in narration scripts, on-screen subtitles, and visual text cards.
+  - The em dash character (Unicode U+2014) is strictly forbidden in narration scripts, on-screen subtitles, and visual text cards.
   - Use a period, a comma, a colon, or separate sentences instead.
+- **Rule R-03 (Zero On-Screen Paragraphs & 6-Word Ceiling)**:
+  - On-screen text must never exceed **6 words** per label, card, or annotation.
+  - Never display explanatory paragraphs on screen. The voiceover speaks explanations; the screen displays visual geometry, formulas (`MathTex`), and concise tags (`+8.95% Overshoot`, `Fundamental Harmonic`).
+- **Rule R-04 (Zero Meta-Prefix Subtitles)**:
+  - Never prefix on-screen text or subtitles with metadata labels like `Title:`, `Subtitle:`, `Explanation:`, `Note:`, or `Beat X:`.
+  - Strictly ban colon redundancies like `"Fourier Series: explain sine waves..."`.
+  - Subtitles must be natural sentence fragments or clean mathematical labels without robotic meta-tags.
 - **No Exclamation Stuffing (`!`)**:
   - Technical cinema conveys authority through calm clarity. Limit exclamation marks to zero or at most one in an entire 60-second video.
 - **No Manufactured Staccato Drama**:
@@ -87,10 +94,10 @@ All Animathor storyboards must be organized into the professional **Audio/Visual
 
 ### Format Structure:
 
-| Beat & Timecode | Visual Action & Mobjects (Manim) | Sync Cue [Word] | Spoken Narration (Voiceover) | Subtitle / MathTex |
+| Beat & Timecode | Visual Action & Mobjects (Manim) | Sync Cue [Word] | Spoken Narration (Voiceover) | On-Screen Text / MathTex (<= 6 Words) |
 |---|---|---|---|---|
-| **Beat 1**<br>00:00 - 00:08<br>*(8 seconds)* | `title = Text(...)`<br>`axes = Axes(...)`<br>`target = Line(...)`<br>Draw axes and square wave target. | On word: **"sudut"** | *"Bisakah gelombang sinus yang mulus membentuk sudut kotak 90 derajat?"*<br><br>*(11 kata • 1.38 wps • PASS)* | **Title**: Sudut Patah Fourier<br><br>**Subtitle**: Bisakah gelombang sinus mulus membentuk sudut 90 derajat? |
-| **Beat 2**<br>00:08 - 00:20<br>*(12 seconds)* | `eq = MathTex(...)`<br>`curve = axes.plot(...)`<br>Draw fundamental harmonic $N=1$. | On word: **"ganjil"** | *"Deret Fourier menjumlahkan harmonik ganjil satu per satu, dimulai dari frekuensi dasar."*<br><br>*(12 kata • 1.0 wps • PASS)* | **Math**: $S_1(x) = \frac{4}{\pi}\sin(x)$<br><br>**Badge**: N = 1 |
+| **Beat 1**<br>00:00 - 00:08<br>*(8 seconds)* | `title = Text("Sudut Patah Fourier", ...)`<br>`axes = Axes(...)`<br>`target = Line(...)`<br>Draw axes and square wave target. | On word: **"sudut"** | *"Bisakah gelombang sinus yang mulus membentuk sudut kotak 90 derajat?"*<br><br>*(11 kata • 1.38 wps • PASS)* | `title`: Sudut Patah Fourier<br>`target`: $f(x) \in \{-1, 1\}$ |
+| **Beat 2**<br>00:08 - 00:20<br>*(12 seconds)* | `eq = MathTex(...)`<br>`curve = axes.plot(...)`<br>Draw fundamental harmonic $N=1$. | On word: **"ganjil"** | *"Deret Fourier menjumlahkan harmonik ganjil satu per satu, dimulai dari frekuensi dasar."*<br><br>*(12 kata • 1.0 wps • PASS)* | `eq`: $S_1(x) = \frac{4}{\pi}\sin(x)$<br>`badge`: $N = 1$ |
 
 ---
 

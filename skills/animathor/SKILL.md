@@ -34,17 +34,27 @@ When prompted to create an animation, ALWAYS follow this 5-phase lifecycle:
 1. **Aspect Ratio & Layout**:
    - **Horizontal (16:9)**: $1920 \times 1080$, `frame_width=14.22`, `frame_height=8.0`.
    - **Vertical (9:16 Shorts/Reels/TikTok)**: $1080 \times 1920$, `frame_width=9.0`, `frame_height=16.0`. Keep content inside safe margins (`buff >= 1.2` at top, `buff >= 1.5` at bottom to clear platform UI overlays).
-2. **Opacity Layering Hierarchy**:
+2. **Spatial Anti-Collision & Focal Point Protection**:
+   - Divide canvas into non-overlapping slots: Header (`UP * 3.2`), Central Visual (`[-2.0, +2.0]`), Annotation Flank (Right/Below), Subtitle Bar (`DOWN * 3.2`).
+   - **No Blind Stacking**: Never animate new text to an occupied slot without `ReplacementTransform` or `FadeOut`.
+   - Keep a clear-radius around the primary focal point (curves, derivations).
+3. **Zero On-Screen Paragraphs (Rule R-03: 6-Word Ceiling)**:
+   - Maximum 6 words per on-screen label, badge, or text card.
+   - Never display explanatory paragraphs on screen. Voiceover carries the explanation; canvas displays visual geometry, mathematical notation (`MathTex`), and concise tags.
+4. **Zero Freak Subtitles / Meta-Prefixes (Rule R-04)**:
+   - Strictly ban robotic metadata prefixes (`Title:`, `Subtitle:`, `Explanation:`, `Beat X:`) and awkward colon chains (`"X: explain Y"`).
+   - Subtitles must be clean, natural sentence fragments or direct mathematical labels.
+5. **Opacity Layering Hierarchy**:
    - `0.15 - 0.35`: Structural elements (axes, grids, coordinate markers).
    - `0.50 - 0.70`: Contextual elements (reference boundaries, target profiles).
    - `1.00`: Primary focus (main animated curves, shapes, transforms).
    - `1.00 + Glow/Color`: Attention & Anomalies (peaks, braces, markers, alerts).
-3. **Typography Standards (Pango Kerning Guard)**:
+6. **Typography Standards (Pango Kerning Guard)**:
    - Always define `MONO = "Consolas"` (Windows) / `"Menlo"` (macOS) / `"DejaVu Sans Mono"` (Linux).
    - Never use proportional fonts for `Text()` in Manim without testing, as Pango frequently introduces overlapping letter bugs.
    - Use `MathTex(r"...")` (CE) or `Tex(R"...")` (GL) for all math and formulas.
-4. **Pacing & Breathing Room**:
-   - Add `self.wait(1.0)` to `self.wait(2.5)` after key reveals. Never immediately wipe the screen.
+7. **Pacing & Breathing Room**:
+   - Add `self.wait(1.5)` to `self.wait(2.5)` after key reveals. Never immediately wipe the screen.
 
 ### Phase 3: Engine Selection & Modular Coding
 Select the engine based on user requirements (defaults to **ManimCE**):

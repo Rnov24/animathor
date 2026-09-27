@@ -192,6 +192,9 @@ We believe educational animations should treat the viewer's time with respect. A
 3. **No Theatrical Filler**: We ban generic rhetorical openings (*"Have you ever wondered..."*, *"In today's video we will explore..."*). We open directly with an intriguing technical puzzle or visual paradox.
 4. **Strict Speech Budget**: Narration is capped at $\le 2.3$ words/second (130 to 140 WPM).
 5. **Mandatory Breathing Pauses**: Every major visual transition or theorem reveal includes a $1.5$s to $2.5$s pause (`self.wait(2.0)`) so the viewer can absorb the intuition.
+6. **Zero Text Collisions & Focal Point Protection**: No blind text stacking. New text must use `ReplacementTransform` or `FadeOut` before occupying the same slot. Central graphs and equations are protected from overlapping labels.
+7. **No Freak Subtitles or Meta-Prefixes (Rule R-04)**: Bans robotic labels like `"Title:"`, `"Subtitle:"`, `"Explanation:"`, and awkward colon formats like `"Topic: explain Topic..."`. Subtitles remain natural, clean, and direct.
+8. **No On-Screen Paragraphs (Rule R-03: 6-Word Ceiling)**: Eliminates walls of text on the canvas. Spoken narration carries the explanation; on-screen text is strictly limited to $\le 6$ words for punchy badges, tags, and mathematical symbols.
 
 ---
 

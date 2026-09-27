@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-Animathor Script & Code Quality Validator (Anti-Slop & Accuracy Linter v2.0)
+Animathor Script & Code Quality Validator (Anti-Slop & Accuracy Linter v2.2)
 Audits storyboards (markdown) and animation scripts (python) against:
 - Rule R-02: Zero Em Dashes (Unicode U+2014)
-- Anti-Slop: Banned English AI clichés and marketing buzzwords
+- Rule R-03: Zero On-Screen Paragraphs (<= 6 words for canvas Text, no wall of text)
+- Rule R-04: Zero Freak Subtitles / Meta-Prefixes (No 'Title:', 'Subtitle:', 'Beat X:', 'X: explain Y')
+- Spatial Anti-Collision: Visual focal point protection & no blind stacking of text
 - Pre-Flight Math Gate: Mandatory verification section in storyboards
 - Dynamic Pacing Budget: Words-per-second speech constraints (<= 2.3 wps) in AV tables
 - Visual Breathing Room: Mandatory pauses (self.wait >= 1.5s) after key reveals
@@ -141,7 +143,7 @@ class ScriptValidator:
                     "Pre-Flight Audit: Missing mandatory 'Mathematical Pre-Flight Audit' section in storyboard."
                 ))
 
-        # 5. Dynamic AV Table Pacing & Word Budget Scanner
+        # 5. Dynamic AV Table Pacing & Word Budget Scanner + Freak Subtitle Guard
         self._audit_av_table(lines)
 
     def _audit_av_table(self, lines: list[str]):
@@ -174,6 +176,7 @@ class ScriptValidator:
 
         beat_idx = -1
         narration_idx = -1
+        onscreen_idx = -1
 
         for idx, col in enumerate(header_cols):
             if any(k in col for k in ["beat", "durasi", "duration", "time", "waktu"]):
@@ -182,12 +185,17 @@ class ScriptValidator:
             if any(k in col for k in ["narasi", "narration", "voiceover", "spoken", "speech", "audio", "naskah"]):
                 if narration_idx == -1:
                     narration_idx = idx
+            if any(k in col for k in ["layar", "screen", "onscreen", "mathtex", "subtitle", "teks"]):
+                if onscreen_idx == -1:
+                    onscreen_idx = idx
 
         # Fallback column heuristics if headers differ
         if beat_idx == -1:
             beat_idx = 0
         if narration_idx == -1 and len(header_cols) >= 4:
             narration_idx = 3
+        if onscreen_idx == -1 and len(header_cols) >= 5:
+            onscreen_idx = 4
 
         # Process data rows (skip header and delimiter at index 0 and 1)
         for line_num, row_raw in table_lines[2:]:
@@ -200,29 +208,46 @@ class ScriptValidator:
 
             # 1. Extract duration
             duration = self._extract_duration(beat_cell)
-            if not duration or duration <= 0:
-                continue
+            if duration and duration > 0:
+                # 2. Extract spoken text
+                words_count = self._extract_spoken_word_count(narration_cell)
+                if words_count > 0:
+                    wps = words_count / duration
+                    if wps > 2.3:
+                        self.findings.append((
+                            "FAIL", line_num,
+                            f"Pacing Overload: Beat ({duration:.1f}s) has {words_count} words ({wps:.2f} words/sec). Max allowed is 2.3 wps."
+                        ))
 
-            # 2. Extract spoken text
-            words_count = self._extract_spoken_word_count(narration_cell)
-            if words_count == 0:
-                continue
+            # 3. Audit On-Screen Column (Rule R-03 and R-04)
+            if onscreen_idx != -1 and len(cols) > onscreen_idx:
+                screen_cell = cols[onscreen_idx]
+                # Check for freak subtitle prefixes: **Subtitle**: ..., **Title**: ...
+                if re.search(r'\*\*(?:Title|Subtitle|Headline|Caption|Explanation|Note|Beat\s*\d+)\*\*:\s*', screen_cell, re.IGNORECASE) or \
+                   re.search(r'\b\w+\s*:\s*(?:explain|explaining|explains|shows|showing)\b', screen_cell, re.IGNORECASE):
+                    self.findings.append((
+                        "FAIL", line_num,
+                        "Rule R-04 (Freak Subtitle): On-screen column contains robotic metadata prefix (e.g. '**Subtitle**:', '**Title**:', 'X: explain Y'). Keep on-screen labels clean."
+                    ))
 
-            wps = words_count / duration
-            if wps > 2.3:
-                self.findings.append((
-                    "FAIL", line_num,
-                    f"Pacing Overload: Beat ({duration:.1f}s) has {words_count} words ({wps:.2f} words/sec). Max allowed is 2.3 wps."
-                ))
+                # Check for on-screen paragraph wordiness
+                # Strip out math formulas $...$ and mobject descriptors like title:
+                cleaned_screen = re.sub(r"\$.*?\$", "", screen_cell)
+                cleaned_screen = re.sub(r"`.*?`", "", cleaned_screen)
+                cleaned_screen = re.sub(r"\b(title|eq|curve|badge|note|target)\s*:\s*", "", cleaned_screen, flags=re.IGNORECASE)
+                screen_words = [w for w in re.split(r"\s+", cleaned_screen.strip()) if len(w) > 1 and not w.startswith("|")]
+                if len(screen_words) > 8:
+                    self.findings.append((
+                        "WARN", line_num,
+                        f"Rule R-03 (On-Screen Wordiness): On-screen column has {len(screen_words)} words. Keep on-screen labels <= 6 words; explanations belong in voiceover."
+                    ))
 
     def _extract_duration(self, text: str) -> float | None:
         """Extracts seconds from timecodes or duration labels."""
-        # Matches: *(10 detik)*, 10s, 10 seconds, 10.5s
         sec_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:detik|seconds|sec|s\b)", text, re.IGNORECASE)
         if sec_match:
             return float(sec_match.group(1))
 
-        # Matches range: 00:00 - 00:10
         tc_match = re.search(r"(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})", text)
         if tc_match:
             m1, s1, m2, s2 = map(int, tc_match.groups())
@@ -234,15 +259,12 @@ class ScriptValidator:
 
     def _extract_spoken_word_count(self, text: str) -> int:
         """Extracts spoken word count, supporting quoted speech or cleaned prose."""
-        # Check quoted speech first: "..." or '...' or “...” or «...»
         quote_match = re.search(r'["\'“«]([^"\'”»]{3,})["\'”»]', text, re.DOTALL)
         if quote_match:
             spoken_text = quote_match.group(1)
-            # Remove punctuation and count
             words = [w for w in re.split(r"\s+", spoken_text.strip()) if w]
             return len(words)
 
-        # Fallback: strip markdown formatting annotations like *(10 kata • 1.0 wps)*
         cleaned = re.sub(r"\*\(.*?\)\*", "", text)
         cleaned = re.sub(r"\*\*.*?\*\*:", "", cleaned)
         cleaned = re.sub(r"<[^>]+>", " ", cleaned)
@@ -266,7 +288,6 @@ class ScriptValidator:
         for i, line in enumerate(lines, 1):
             if is_suppressed(line):
                 continue
-            # Matches MathTex("...") or Tex("...") where backslash is not preceded by r or R
             bad_mathtex = re.search(r'(?<![rR])MathTex\(\s*["\']\\[a-zA-Z]', line)
             bad_tex = re.search(r'(?<![rR])Tex\(\s*["\']\\[a-zA-Z]', line)
             if bad_mathtex or bad_tex:
@@ -280,18 +301,107 @@ class ScriptValidator:
                 if re.search(pattern, line, re.IGNORECASE):
                     self.findings.append(("WARN", i, f"Anti-Slop: Potential AI buzzword in line: {line.strip()[:65]}"))
 
-        # 5. Visual Breathing Room Guard (self.wait >= 1.5s after major reveals)
+        # 5. Rule R-03: Zero On-Screen Paragraphs (6-Word Ceiling)
+        self._audit_onscreen_text_length(lines)
+
+        # 6. Rule R-04: Zero Freak Subtitles / Meta-Prefixes
+        self._audit_freak_subtitles(lines)
+
+        # 7. Spatial Anti-Collision & Stacking Guard
+        self._audit_spatial_collision(content)
+
+        # 8. Visual Breathing Room Guard (self.wait >= 1.5s after major reveals)
         self._audit_breathing_room(content)
 
-        # 6. Safe Zone Buffers for 9:16 Vertical Video
+        # 9. Safe Zone Buffers for 9:16 Vertical Video
         self._audit_vertical_safe_zones(lines, content)
 
-        # 7. Clean Scene Exit Guard
+        # 10. Clean Scene Exit Guard
         self._audit_scene_exits(content)
+
+    def _audit_onscreen_text_length(self, lines: list[str]):
+        """Rule R-03: Ensures on-screen Text mobjects do not contain walls of explanatory text."""
+        for i, line in enumerate(lines, 1):
+            if is_suppressed(line):
+                continue
+            # Matches Text("...") or Paragraph("...")
+            text_matches = re.finditer(r'\b(?:Text|Paragraph)\(\s*([rR]?["\'])([\s\S]*?)\1', line)
+            for m in text_matches:
+                raw_text = m.group(2).strip()
+                # Skip font constants, color strings, or short abbreviations
+                if not raw_text or raw_text in ["Consolas", "Menlo", "DejaVu Sans Mono"]:
+                    continue
+                words = [w for w in re.split(r"\s+", raw_text) if w]
+                # If text exceeds 6 words, or contains multiple full sentences
+                has_multisentence = bool(re.search(r'\.\s+[A-Z]', raw_text))
+                if len(words) > 6 or (len(words) > 4 and has_multisentence):
+                    preview = raw_text[:40] + "..." if len(raw_text) > 40 else raw_text
+                    self.findings.append((
+                        "FAIL", i,
+                        f"Rule R-03 (On-Screen Paragraph): Text(...) contains {len(words)} words ('{preview}'). Canvas text must be a concise label (<= 6 words). Move explanations to spoken voiceover!"
+                    ))
+
+    def _audit_freak_subtitles(self, lines: list[str]):
+        """Rule R-04: Detects robotic metadata prefixes or 'X: explain Y' patterns in Text()."""
+        prefix_pattern = re.compile(
+            r'\b(?:Text|Paragraph)\(\s*([rR]?["\'])\s*(?:Title|Subtitle|Headline|Caption|Label|Note|Explanation|Beat\s*\d+)\s*:',
+            re.IGNORECASE
+        )
+        colon_explain_pattern = re.compile(
+            r'\b(?:Text|Paragraph)\(\s*([rR]?["\'])[^:"\']{3,25}\s*:\s*(?:explain|explaining|explains|shows|showing|visualizes|here we)\b',
+            re.IGNORECASE
+        )
+
+        for i, line in enumerate(lines, 1):
+            if is_suppressed(line):
+                continue
+            if prefix_pattern.search(line):
+                self.findings.append((
+                    "FAIL", i,
+                    "Rule R-04 (Freak Subtitle): On-screen text contains robotic metadata prefix ('Title:', 'Subtitle:', 'Explanation:'). Keep on-screen text clean and direct."
+                ))
+            elif colon_explain_pattern.search(line):
+                self.findings.append((
+                    "FAIL", i,
+                    "Rule R-04 (Freak Subtitle): On-screen text contains 'X: explain Y' pattern. Replace with punchy standalone title or mathematical tag."
+                ))
+
+    def _audit_spatial_collision(self, content: str):
+        """Detects blind stacking where new text is animated to an edge while previous text was not cleared."""
+        scene_blocks = re.findall(r"class\s+([A-Za-z0-9_]+)\s*\([^)]*Scene[^)]*\):([\s\S]*?)(?=\nclass|\Z)", content)
+        for scene_name, block in scene_blocks:
+            lines = block.splitlines()
+            edge_assignments: dict[str, list[str]] = {"UP": [], "DOWN": []}
+
+            for line in lines:
+                if is_suppressed(line):
+                    continue
+                # Track assignments to edges: title.to_edge(UP)
+                up_match = re.search(r'([a-zA-Z_0-9]+)\.to_edge\(\s*UP', line)
+                if up_match:
+                    var_name = up_match.group(1)
+                    if var_name not in edge_assignments["UP"]:
+                        edge_assignments["UP"].append(var_name)
+
+                down_match = re.search(r'([a-zA-Z_0-9]+)\.to_edge\(\s*DOWN', line)
+                if down_match:
+                    var_name = down_match.group(1)
+                    if var_name not in edge_assignments["DOWN"]:
+                        edge_assignments["DOWN"].append(var_name)
+
+            # Check if multiple variables share UP or DOWN and neither FadeOut nor ReplacementTransform was used
+            for edge, vars_list in edge_assignments.items():
+                if len(vars_list) >= 2:
+                    has_transform = "ReplacementTransform" in block or "Transform" in block
+                    has_fadeout = "FadeOut" in block
+                    if not (has_transform or has_fadeout):
+                        self.findings.append((
+                            "WARN", 0,
+                            f"Spatial Collision Risk: Multiple objects {vars_list} placed at to_edge({edge}) in Scene '{scene_name}' without detected FadeOut or ReplacementTransform."
+                        ))
 
     def _audit_breathing_room(self, content: str):
         """Verifies that scene animations include necessary viewer breathing pauses."""
-        # Find scene classes
         scene_blocks = re.findall(r"class\s+([A-Za-z0-9_]+)\s*\([^)]*Scene[^)]*\):([\s\S]*?)(?=\nclass|\Z)", content)
         for scene_name, block in scene_blocks:
             play_count = len(re.findall(r"\bself\.play\(", block))
@@ -303,7 +413,6 @@ class ScriptValidator:
                     f"Breathing Room: Scene '{scene_name}' contains {play_count} animations but zero self.wait() calls. Add 1.5s to 2.5s pauses after major reveals."
                 ))
             elif play_count >= 3 and len(wait_matches) > 0:
-                # Check durations of waits
                 durations = [float(w) if w else 1.0 for w in wait_matches]
                 max_wait = max(durations)
                 if max_wait < 1.0:
@@ -355,7 +464,6 @@ class ScriptValidator:
         for scene_name, block in scene_blocks:
             play_count = len(re.findall(r"\bself\.play\(", block))
             if play_count >= 2:
-                # Check if FadeOut or clear exists
                 has_exit = (
                     "FadeOut" in block or
                     "Uncreate" in block or
@@ -387,7 +495,7 @@ class ScriptValidator:
             return
 
         print("=" * 68)
-        print(f" ANIMATHOR SCRIPT & CODE QUALITY AUDIT v2.0: {self.path.name}")
+        print(f" ANIMATHOR SCRIPT & CODE QUALITY AUDIT v2.2: {self.path.name}")
         print("=" * 68)
         if not self.findings:
             print("[+] PASS: 100% compliant with Anti-Slop, Accuracy & Pacing standards!")
@@ -406,7 +514,7 @@ class ScriptValidator:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Animathor Script & Code Quality Validator v2.0")
+    parser = argparse.ArgumentParser(description="Animathor Script & Code Quality Validator v2.2")
     parser.add_argument("file", help="Path to storyboard markdown or python scene script")
     parser.add_argument("--json", action="store_true", help="Output findings in structured JSON format")
     args = parser.parse_args()

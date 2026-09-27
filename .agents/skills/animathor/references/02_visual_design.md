@@ -106,3 +106,62 @@ ACCENT = "#16C79A"      # Mint Green
 ALERT = "#FF4C60"
 MUTED = "#7F8C8D"
 ```
+
+---
+
+## 5. The Spatial Anti-Collision & Focal Point Protection System
+
+Visual collisions occur when text overlaps other text, or when annotations cover the visual focal point (the graph, curve, or derivation step). Animathor enforces strict spatial slots and collision prevention rules:
+
+### 5.1 The 4 Non-Overlapping Canvas Slots
+
+Divide the screen into clear vertical zones that never share mobjects:
+
+```
+┌────────────────────────────────────────────────────────┐
+│ ZONE 1: HEADER & TITLE SLOT  (UP * 3.0 to UP * 3.5)    │
+├────────────────────────────────────────────────────────┤
+│                                                        │
+│ ZONE 2: PRIMARY FOCAL POINT ZONE  ([-2.0, +2.0])       │
+│ Graph / Geometry / Math Derivation. ZERO text here     │
+│ except direct pointer arrows/callouts pointing IN.     │
+│                                                        │
+├────────────────────────────────────────────────────────┤
+│ ZONE 3: ANNOTATION / FORMULA SLOTS (FLANK RIGHT/BELOW) │
+│ .next_to(focal_point, RIGHT, buff=0.4) or DOWN         │
+├────────────────────────────────────────────────────────┤
+│ ZONE 4: SUBTITLE / CAPTION BAR  (DOWN * 3.0 to 3.4)    │
+└────────────────────────────────────────────────────────┘
+```
+
+### 5.2 The "No Blind Stacking" Rule
+NEVER animate a new text mobject into a slot where an existing text mobject resides without clearing the old one first:
+- **Option A (Morphing)**: `self.play(ReplacementTransform(old_title, new_title))`
+- **Option B (Fade Transition)**: `self.play(FadeOut(old_title)); self.play(FadeIn(new_title))`
+- **Option C (Relative Stacking)**: `new_text.next_to(old_text, DOWN, buff=0.3)`
+
+Calling `Write(title2.to_edge(UP))` while `title1.to_edge(UP)` is still on screen without `next_to` or `FadeOut` is a critical collision error.
+
+### 5.3 Focal Point Clear-Radius
+When pointing to a critical anomaly (e.g. Gibbs peak, tangent line, discontinuity):
+- Arrows and callout text must point *at* the target with `buff=0.15` to `0.25`.
+- Never place text directly over the dot, vertex, or intersection.
+
+---
+
+## 6. Clean Subtitles & Concise On-Screen Labeling
+
+### 6.1 Zero Meta-Prefix Subtitles (Rule R-04)
+AI script generators frequently leak markdown metadata and robotic prefixes into visual text cards. The following patterns are strictly **FORBIDDEN** in on-screen `Text()` or subtitles:
+- **Banned**: `Text("Title: Fourier Analysis")` -> **Correct**: `Text("Fourier Analysis")`
+- **Banned**: `Text("Subtitle: Explain how waves add up")` -> **Correct**: `Text("Harmonic Wave Addition")`
+- **Banned**: `Text("Beat 1: In this scene we see...")` -> **Correct**: Use voiceover narration.
+- **Banned Colon Chaining**: `Text("Fourier Series: explain sine waves...")` -> **Correct**: Concise standalone label.
+
+### 6.2 Zero On-Screen Paragraphs (The 6-Word Ceiling)
+The voiceover explains; the screen visualizes:
+- **Maximum 6 words** for any on-screen text label, card, or annotation.
+- **Never display a paragraph on screen**. If you write more than 8 words in a `Text()` call, you have committed an educational failure: viewers cannot read a paragraph and watch an animation at the same time.
+- Move all explanatory sentences into the **Spoken Narration (voiceover)** track. The canvas should only hold:
+  1. Mathematical notation (`MathTex`)
+  2. Concise tags (`Overshoot: +8.95%`, `Fundamental Harmonic`, `Jump Discontinuity`)
