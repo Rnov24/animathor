@@ -1,24 +1,24 @@
-# [Judul Video / Video Title]
+# [Video Title]
 
-## 1. Mathematical Pre-Flight Audit (Verifikasi Akurasi & Teorema)
+## 1. Mathematical Pre-Flight Audit (Accuracy & Theorem Verification)
 
-Sebelum menulis naskah, pastikan seluruh fakta matematis diverifikasi:
-- **Teorema / Konsep Kunci**: [e.g. Teorema Deret Fourier & Syarat Dirichlet untuk gelombang periodik]
-- **Persamaan Eksak**:
-  $$\text{[Tulis rumus formal lengkap beserta domain dan batasan indeks, e.g. } S_N(x) = \frac{4}{\pi}\sum_{k=1,3,\dots}^N \frac{\sin(kx)}{k} \text{]}$$
-- **Konstanta / Batas Kritis**: [e.g. Batas overshoot Gibbs = $\frac{1}{\pi}\int_0^\pi \frac{\sin(t)}{t}dt - \frac{1}{2} \approx 0.08949 \approx 8.95\%$]
-- **Tipe Konvergensi**: [e.g. Konvergen titik-demi-titik (pointwise) ke rata-rata lompatan $f(0)=0$, bukan konvergen seragam (uniform)]
-- **Pemeriksaan Anti-Mitos**: [e.g. Menambah harmonik tidak menghilangkan lonjakan; frekuensi bertambah hanya memampatkan osilasi mendekati titik patahan]
+Before drafting narration, verify all underlying mathematical facts:
+- **Key Theorem / Core Concept**: [e.g. Fourier Series Theorem and Dirichlet Conditions for periodic waveforms]
+- **Exact Formulation**:
+  $$\text{[Write formal equation with domain and index bounds, e.g. } S_N(x) = \frac{4}{\pi}\sum_{k=1,3,\dots}^N \frac{\sin(kx)}{k} \text{]}$$
+- **Critical Constants & Bounds**: [e.g. Gibbs overshoot limit = $\frac{1}{\pi}\int_0^\pi \frac{\sin(t)}{t}dt - \frac{1}{2} \approx 0.08949 \approx 8.95\%$]
+- **Convergence Classification**: [e.g. Pointwise convergence to jump average $f(0)=0$; non-uniform convergence near discontinuities]
+- **Anti-Myth Checklist**: [e.g. Adding harmonics does not eliminate overshoot; increasing frequency only compresses ripples toward the jump]
 
 ---
 
-## 2. Parameter Produksi & Narasi
+## 2. Production & Narration Parameters
 
-- **Format Video**: [16:9 Widescreen (1920x1080) ATAU 9:16 Portrait Shorts (1080x1920)]
-- **Target Durasi Total**: [e.g. 60 detik]
-- **Target Kecepatan Tutur**: 130 - 140 kata per menit (~2.1 - 2.3 kata per detik)
-- **Anggaran Kata Total (Word Budget)**: Maksimal [Target Durasi x 2.0] kata = [e.g. 120 kata]
-- **Palet Warna**:
+- **Video Format**: [16:9 Widescreen (1920x1080) OR 9:16 Portrait Shorts (1080x1920)]
+- **Target Duration**: [e.g. 60 seconds]
+- **Target Speech Cadence**: 130 - 140 words per minute (~2.1 - 2.3 words per second)
+- **Total Word Budget**: Maximum [Target Duration x 2.0] words = [e.g. 120 words]
+- **Color Palette**:
   - `BG`: `#0B0F19` (Slate Dark Cinema)
   - `PRIMARY`: `#58C4DD` (Cyan-Blue 3B1B)
   - `SECONDARY`: `#83C167` (Sage Green 3B1B)
@@ -30,23 +30,23 @@ Sebelum menulis naskah, pastikan seluruh fakta matematis diverifikasi:
 
 ## 3. Two-Column Audio/Visual (AV) Script
 
-| Beat & Durasi | Aksi Visual & Mobjects (Manim) | Titik Sinkronisasi [Trigger] | Naskah Narasi / Voiceover (Kata & WPM) | Teks Layar / MathTex (<= 6 Kata, Bebas Paragraf) |
+| Beat & Duration | Visual Action & Mobjects (Manim) | Sync Trigger [Word] | Spoken Narration (Voiceover & WPM) | On-Screen Text / MathTex (<= 6 Words) |
 |---|---|---|---|---|
-| **Beat 1: The Hook**<br>00:00 - 00:10<br>*(10 detik)*<br>Anggaran: $\le 20$ kata | - `title = Text("Sudut Patah Fourier", font=MONO)` di atas<br>- `axes = Axes(...)` digambar halus (opacity 0.3)<br>- `target = DashedLine(...)` gelombang kotak target muncul (opacity 0.6) | Pada kata: **"sudut"** | *"Bisakah gelombang sinus yang lentur membentuk sudut tegak 90 derajat?"*<br><br>*(10 kata • 1.0 wps • [PASS])* | `title`: Sudut Patah Fourier<br>`target`: $f(x) \in \{-1, 1\}$ |
-| **Beat 2: Resep Harmonik**<br>00:10 - 00:25<br>*(15 detik)*<br>Anggaran: $\le 30$ kata | - Formula deret Fourier $S_N(x)$ muncul<br>- Kurva $N=1$ digambar dengan `Create(curve)`<br>- Bertransformasi bertahap ke $N=3$, $N=7$, dan $N=19$<br>- Lereng kurva tampak semakin curam | Pada kata: **"harmonik"** | *"Deret Fourier menjumlahkan harmonik ganjil: semakin tinggi frekuensinya, lereng patahan semakin tegak mendekati kotak."*<br><br>*(16 kata • 1.07 wps • [PASS])* | `eq`: $S_N(x) = \frac{4}{\pi}\sum_{k=1,3,\dots}^N \frac{\sin(kx)}{k}$<br>`badge`: $N = 1 \to 19$ |
-| **Beat 3: The Aha Moment**<br>00:25 - 00:42<br>*(17 detik)*<br>Anggaran: $\le 34$ kata | - Harmonik dinaikkan ke $N=51$<br>- `peak_dot = Dot(color=ALERT)` muncul di puncak riak pertama<br>- `brace = Brace(...)` mengukur overshoot $+8.95\%$<br>- Jeda visual 2.5 detik untuk mencerna | Pada kata: **"lonjakan"** | *"Namun tepat di tepi patahan, selalu timbul lonjakan sekitar 8.95 persen. Sebanyak apa pun gelombang ditambah, lonjakan ini tidak pernah hilang."*<br><br>*(23 kata • 1.35 wps • [PASS])* | `badge`: Overshoot Tetap Ada<br>`math`: $+8.95\%$ |
-| **Beat 4: Resolusi & Penutup**<br>00:42 - 00:55<br>*(13 detik)*<br>Anggaran: $\le 26$ kata | - Sorotan titik tengah konvergensi Dirichlet di $(0,0)$<br>- Fade out seluruh elemen secara elegan (*clean exit*) | Pada kata: **"Gibbs"** | *"Inilah Fenomena Gibbs: batas matematis saat gelombang kontinu dipaksa membentuk diskontinuitas."*<br><br>*(12 kata • 0.92 wps • [PASS])* | `title`: Fenomena Gibbs<br>`math`: $f(0) = 0$ |
+| **Beat 1: The Hook**<br>00:00 - 00:10<br>*(10 sec)*<br>Budget: $\le 20$ words | - `title = Text("Fourier Square Corner", font=MONO)` at top<br>- `axes = Axes(...)` drawn softly (opacity 0.3)<br>- `target = DashedLine(...)` target square wave appears (opacity 0.6) | On word: **"corner"** | *"Can smooth sine waves combine to form a sharp 90-degree corner?"*<br><br>*(11 words • 1.1 wps • [PASS])* | `title`: Fourier Square Corner<br>`target`: $f(x) \in \{-1, 1\}$ |
+| **Beat 2: Harmonic Recipe**<br>00:10 - 00:25<br>*(15 sec)*<br>Budget: $\le 30$ words | - Formula for Fourier series $S_N(x)$ fades in<br>- Curve $N=1$ drawn via `Create(curve)`<br>- Progressively morphs to $N=3$, $N=7$, and $N=19$<br>- Slope of edge steepens toward vertical | On word: **"harmonics"** | *"A Fourier series sums odd harmonics: as frequencies rise, the slope steepens toward a square wave."*<br><br>*(16 words • 1.07 wps • [PASS])* | `eq`: $S_N(x) = \frac{4}{\pi}\sum_{k=1,3,\dots}^N \frac{\sin(kx)}{k}$<br>`badge`: $N = 1 \to 19$ |
+| **Beat 3: The Aha Moment**<br>00:25 - 00:42<br>*(17 sec)*<br>Budget: $\le 34$ words | - Harmonic count elevated to $N=51$<br>- `peak_dot = Dot(color=ALERT)` marks first crest<br>- `brace = Brace(...)` measures overshoot of $+8.95\%$<br>- Visual pause of 2.5s for comprehension | On word: **"overshoot"** | *"Yet right at the jump, an overshoot of roughly 8.95 percent remains. No matter how many harmonics you add, this spike never vanishes."*<br><br>*(24 words • 1.41 wps • [PASS])* | `badge`: Persistent Overshoot<br>`math`: $+8.95\%$ |
+| **Beat 4: Resolution & Outro**<br>00:42 - 00:55<br>*(13 sec)*<br>Budget: $\le 26$ words | - Highlight Dirichlet midpoint convergence at $(0,0)$<br>- Elegant fade out across all scene elements (*clean exit*) | On word: **"Gibbs"** | *"This is Gibbs Phenomenon: the mathematical boundary when continuous waves attempt to build a discontinuity."*<br><br>*(15 words • 1.15 wps • [PASS])* | `title`: Gibbs Phenomenon<br>`math`: $f(0) = 0$ |
 
 ---
 
 ## 4. Anti-Slop Quality & Accuracy Checklist
 
-- [ ] **Bebas Tanda Pisah Em-Dash**: Tidak ada karakter tanda pisah em-dash dalam naskah narasi, subtitle, maupun teks layar (Aturan R-02).
-- [ ] **Bebas Tumpukan Teks (Zero Overlap)**: Setiap teks baru menggantikan teks lama dengan `ReplacementTransform` atau `FadeOut`. Tidak ada teks yang menumpuk di koordinat yang sama atau menutupi titik vokal grafis.
-- [ ] **Bebas Paragraf Layar (<= 6 Kata)**: Teks di layar hanya berupa label ringkas atau rumus matematika. Seluruh kalimat penjelasan disampaikan lewat narasi suara (Aturan R-03).
-- [ ] **Bebas Awalan Robotik (Zero Meta-Prefix)**: Tidak ada awalan seperti "Title:", "Subtitle:", "Explanation:", atau format aneh "X: explain Y" pada teks layar (Aturan R-04).
-- [ ] **Bebas Kata Klise AI**: Naskah bebas dari istilah pemasaran dan meta-komentar klise sesuai panduan 06.
-- [ ] **Anggaran Kecepatan Tutur**: Tidak ada beat dengan kecepatan tutur melebihi 2.3 kata per detik.
-- [ ] **Akurasi Matematis**: Definisi batas, notasi rumus LaTeX, dan tipe konvergensi sudah diverifikasi secara formal.
-- [ ] **Jeda Bernapas (Breathing Room)**: Terdapat jeda hening minimal 1.5 hingga 2.5 detik setelah penyingkapan konsep puncak (Aha Moment).
-- [ ] **Titik Sinkronisasi Jelas**: Setiap animasi visual memiliki pemicu kata kunci yang eksplisit.
+- [ ] **Zero Em Dashes**: No em dash characters in narration, subtitles, or on-screen labels (Rule R-02).
+- [ ] **Zero Text Stacking (Zero Overlap)**: Every new text replaces old text using `ReplacementTransform` or `FadeOut`. No text elements overlap at identical coordinates or obscure graphic focal points.
+- [ ] **Zero On-Screen Paragraphs (<= 6 Words)**: On-screen text is strictly limited to concise labels or formulas. Full sentences belong exclusively in spoken voiceover (Rule R-03).
+- [ ] **Zero Meta-Prefixes**: No prefixes such as 'Title:', 'Subtitle:', 'Explanation:', or patterns like 'X: explain Y' on canvas text (Rule R-04).
+- [ ] **Zero AI Clichés**: Script is strictly free of marketing hype and rhetorical filler per guide 06.
+- [ ] **Speech Pacing Budget**: No narrative beat exceeds 2.3 words per second.
+- [ ] **Mathematical Accuracy**: Formal limit definitions, LaTeX notation, and convergence types are strictly verified.
+- [ ] **Breathing Room**: At least 1.5 to 2.5 seconds of silence (`self.wait(2.0)`) follows every key conceptual reveal.
+- [ ] **Explicit Sync Triggers**: Every visual transition is explicitly tied to a spoken trigger word.

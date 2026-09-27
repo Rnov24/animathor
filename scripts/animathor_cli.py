@@ -74,7 +74,7 @@ def scaffold_project(project_name: str, vertical: bool = False, title: str | Non
 
     # 4. storyboard.md
     sb_tpl = (TEMPLATES_DIR / "storyboard_template.md").read_text(encoding="utf-8")
-    sb_content = sb_tpl.replace("[Judul Video / Video Title]", project_title)
+    sb_content = sb_tpl.replace("[Video Title]", project_title)
     (target_dir / "storyboard.md").write_text(sb_content, encoding="utf-8")
     print(f"  [+] Created: {project_name}/storyboard.md")
 

@@ -96,8 +96,8 @@ All Animathor storyboards must be organized into the professional **Audio/Visual
 
 | Beat & Timecode | Visual Action & Mobjects (Manim) | Sync Cue [Word] | Spoken Narration (Voiceover) | On-Screen Text / MathTex (<= 6 Words) |
 |---|---|---|---|---|
-| **Beat 1**<br>00:00 - 00:08<br>*(8 seconds)* | `title = Text("Sudut Patah Fourier", ...)`<br>`axes = Axes(...)`<br>`target = Line(...)`<br>Draw axes and square wave target. | On word: **"sudut"** | *"Bisakah gelombang sinus yang mulus membentuk sudut kotak 90 derajat?"*<br><br>*(11 kata • 1.38 wps • PASS)* | `title`: Sudut Patah Fourier<br>`target`: $f(x) \in \{-1, 1\}$ |
-| **Beat 2**<br>00:08 - 00:20<br>*(12 seconds)* | `eq = MathTex(...)`<br>`curve = axes.plot(...)`<br>Draw fundamental harmonic $N=1$. | On word: **"ganjil"** | *"Deret Fourier menjumlahkan harmonik ganjil satu per satu, dimulai dari frekuensi dasar."*<br><br>*(12 kata • 1.0 wps • PASS)* | `eq`: $S_1(x) = \frac{4}{\pi}\sin(x)$<br>`badge`: $N = 1$ |
+| **Beat 1**<br>00:00 - 00:08<br>*(8 seconds)* | `title = Text("Fourier Square Corner", ...)`<br>`axes = Axes(...)`<br>`target = Line(...)`<br>Draw axes and square wave target. | On word: **"corner"** | *"Can smooth sine waves combine to form a sharp 90-degree corner?"*<br><br>*(11 words • 1.38 wps • PASS)* | `title`: Fourier Square Corner<br>`target`: $f(x) \in \{-1, 1\}$ |
+| **Beat 2**<br>00:08 - 00:20<br>*(12 seconds)* | `eq = MathTex(...)`<br>`curve = axes.plot(...)`<br>Draw fundamental harmonic $N=1$. | On word: **"harmonics"** | *"A Fourier series sums odd harmonics one by one, starting from the fundamental."*<br><br>*(13 words • 1.08 wps • PASS)* | `eq`: $S_1(x) = \frac{4}{\pi}\sin(x)$<br>`badge`: $N = 1$ |
 
 ---
 

@@ -26,7 +26,7 @@ class MathDerivationScene(Scene):
         self.camera.background_color = BG
 
         # Header
-        title = Text("Turunan Hasil Kali (Product Rule)", font=MONO, font_size=32, color=ACCENT)
+        title = Text("Product Rule Derivation", font=MONO, font_size=32, color=ACCENT)
         title.to_edge(UP, buff=0.8)
         self.play(Write(title))
         self.wait(0.5)
@@ -42,7 +42,7 @@ class MathDerivationScene(Scene):
         eq1.set_color_by_tex("f", PRIMARY)
         eq1.set_color_by_tex("g", SECONDARY)
 
-        note1 = Text("Definisi limit turunan", font=MONO, font_size=20, color=MUTED)
+        note1 = Text("Derivative limit definition", font=MONO, font_size=20, color=MUTED)
         note1.next_to(eq1, DOWN, buff=0.6)
 
         self.play(Write(eq1), FadeIn(note1), run_time=1.5)
@@ -59,7 +59,7 @@ class MathDerivationScene(Scene):
         eq2.set_color_by_tex("f", PRIMARY)
         eq2.set_color_by_tex("g", SECONDARY)
 
-        note2 = Text("Faktorkan suku f(x+h) dan g(x)", font=MONO, font_size=20, color=MUTED)
+        note2 = Text("Factor f(x+h) and g(x)", font=MONO, font_size=20, color=MUTED)
         note2.next_to(eq2, DOWN, buff=0.6)
 
         self.play(
@@ -81,7 +81,7 @@ class MathDerivationScene(Scene):
         eq3.set_color_by_tex("f", PRIMARY)
         eq3.set_color_by_tex("g", SECONDARY)
 
-        note3 = Text("Rumus Turunan Hasil Kali Selesai", font=MONO, font_size=22, color=ACCENT, weight=BOLD)
+        note3 = Text("Product Rule Complete", font=MONO, font_size=22, color=ACCENT, weight=BOLD)
         note3.next_to(eq3, DOWN, buff=0.6)
 
         surround = SurroundingRectangle(eq3, color=ACCENT, buff=0.3, corner_radius=0.1)

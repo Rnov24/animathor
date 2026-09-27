@@ -110,11 +110,11 @@ python scripts/animathor_cli.py stitch my_project/script.py
 You can generate neural, studio-grade voices for free using `edge-tts`:
 
 ```powershell
-# Indonesian Voice
-edge-tts --voice id-ID-ArdiNeural --text "Bisakah gelombang sinus yang lentur membentuk sudut kotak 90 derajat?" --write-media scene1.mp3
-
-# English Voice
+# Neural English Voice (Male)
 edge-tts --voice en-US-ChristopherNeural --text "Can smooth sine waves form a 90-degree corner?" --write-media scene1.mp3
+
+# Neural English Voice (Female)
+edge-tts --voice en-US-JennyNeural --text "Can smooth sine waves form a 90-degree corner?" --write-media scene1.mp3
 ```
 
 ### 4.2 Muxing Video and Audio

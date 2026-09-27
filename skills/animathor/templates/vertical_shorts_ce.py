@@ -50,7 +50,7 @@ class VerticalShortsScene(Scene):
         ).move_to(UP * 7.0)
 
         pill_text = Text(
-            "MATEMATIKA & SINYAL",
+            "MATHEMATICS & SIGNALS",
             font=MONO,
             font_size=18,
             weight=BOLD,
@@ -60,7 +60,7 @@ class VerticalShortsScene(Scene):
         header = VGroup(pill_box, pill_text)
 
         title = Text(
-            "Fenomena Gibbs",
+            "Gibbs Phenomenon",
             font=MONO,
             font_size=36,
             weight=BOLD,
@@ -92,7 +92,7 @@ class VerticalShortsScene(Scene):
 
         # Main animated curve
         curve = axes.plot(lambda x: (4 / np.pi) * np.sin(x), color=PRIMARY, stroke_width=3.5)
-        curve_badge = Text("Harmonik N = 1", font=MONO, font_size=20, color=PRIMARY)
+        curve_badge = Text("Harmonic N = 1", font=MONO, font_size=20, color=PRIMARY)
         curve_badge.next_to(axes, UP, buff=0.2)
 
         self.play(Create(curve), FadeIn(curve_badge), run_time=1.2)
@@ -104,7 +104,7 @@ class VerticalShortsScene(Scene):
             color=PRIMARY,
             stroke_width=3.5
         )
-        curve_badge_high = Text("Harmonik N = 19", font=MONO, font_size=20, color=PRIMARY)
+        curve_badge_high = Text("Harmonic N = 19", font=MONO, font_size=20, color=PRIMARY)
         curve_badge_high.next_to(axes, UP, buff=0.2)
 
         self.play(
@@ -116,7 +116,7 @@ class VerticalShortsScene(Scene):
 
         # Attention: Peak overshoot indicator
         peak_dot = Dot(point=axes.c2p(0.16, 1.18), color=ALERT, radius=0.12)
-        overshoot_label = Text("Overshoot ~8.95%!", font=MONO, font_size=22, color=ALERT, weight=BOLD)
+        overshoot_label = Text("Overshoot ~8.95%", font=MONO, font_size=22, color=ALERT, weight=BOLD)
         overshoot_label.next_to(peak_dot, UR, buff=0.2)
 
         self.play(GrowFromCenter(peak_dot), Write(overshoot_label), run_time=1.0)
@@ -136,7 +136,7 @@ class VerticalShortsScene(Scene):
         ).move_to(DOWN * 6.0)
 
         sub_text = Text(
-            "Lonjakan di dekat tebing patahan\ntidak akan pernah hilang!",
+            "The overshoot near the edge\nnever vanishes",
             font=MONO,
             font_size=20,
             color=WHITE,
