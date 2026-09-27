@@ -38,13 +38,13 @@ To install Animathor from the `skills.sh` ecosystem into your active project:
 
 ```bash
 # Add to current project (auto-detects agent: Claude, Cursor, Antigravity, etc.)
-npx skills add <username>/animathor
+npx skills add Rnov24/animathor
 
 # Or install globally so all your projects have access:
-npx skills add <username>/animathor -g
+npx skills add Rnov24/animathor -g
 
 # Or target specific AI agents:
-npx skills add <username>/animathor -a claude-code cursor
+npx skills add Rnov24/animathor -a claude-code cursor
 
 # Local testing without pushing to GitHub:
 npx skills add ./skills/animathor
@@ -66,63 +66,18 @@ If you prefer a graphical interface in VS Code or Cursor:
 
 ---
 
-### 3. How to Publish / Index Animathor on `skills.sh`
+### 3. How to Index Animathor on `skills.sh`
 `skills.sh` is decentralized: there is no manual approval form. Any public GitHub repository structured according to the Agent Skills specification is automatically indexed:
-1. **Repository Structure**: This repository already places the skill inside `skills/animathor/SKILL.md` (the standard multi-skill layout expected by `skills.sh`).
-2. **Push to Public GitHub**: Push this repository to a public GitHub repo (e.g. `https://github.com/<username>/animathor`).
-3. **Add GitHub Topics**: In your GitHub repository settings, add the topics:
+1. **Repository Structure**: This repository places the skill inside `skills/animathor/SKILL.md` (the standard multi-skill layout expected by `skills.sh`).
+2. **Public GitHub**: Hosted at [https://github.com/Rnov24/animathor](https://github.com/Rnov24/animathor).
+3. **Repository Topics**: Includes tags:
    - `agent-skills`
    - `skills`
    - `manim`
    - `mathematics`
    - `animation`
    - `3blue1brown`
-4. **Instant Indexing**: Once pushed, users anywhere can run `npx skills add <username>/animathor`, and your skill will appear on [skills.sh](https://skills.sh).
-
----
-
-### 4. Alternative Local & Offline Installers
-
-Animathor includes a standalone installer script for Unix and Git Bash environments:
-
-```bash
-# 1. Install into the current project:
-bash skill.sh install
-
-# 2. Or install into a specific target project:
-bash skill.sh install --project /path/to/my-video-project
-
-# 3. Or install GLOBALLY for all agent sessions (~/.agents and ~/.claude):
-bash skill.sh install --global
-
-# 4. Check system toolchain health (Python, Manim, FFmpeg, LaTeX):
-bash skill.sh check
-```
-
-**One-liner Remote Install**:
-```bash
-curl -fsSL https://raw.githubusercontent.com/<username>/animathor/main/skill.sh | bash
-```
-
----
-
-### Method 3: Install via `skill.ps1` (Windows PowerShell)
-
-For native Windows users without Git Bash:
-
-```powershell
-# Install into the current project:
-.\skill.ps1 install
-
-# Install into a specific directory:
-.\skill.ps1 install -Project D:\Projects\MyVideoProject
-
-# Install GLOBALLY for all agent sessions:
-.\skill.ps1 install -Global
-
-# Run toolchain health check:
-.\skill.ps1 check
-```
+4. **Instant Indexing**: Users anywhere can run `npx skills add Rnov24/animathor`.
 
 ---
 
