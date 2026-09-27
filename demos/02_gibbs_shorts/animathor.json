@@ -1,0 +1,10 @@
+{
+  "name": "gibbs_shorts",
+  "title": "Gibbs Phenomenon in 60s",
+  "format": "vertical",
+  "aspect_ratio": "9:16",
+  "resolution": [1080, 1920],
+  "fps": 60,
+  "engine": "manimce",
+  "created_at": "2026-09-28T02:05:00Z"
+}

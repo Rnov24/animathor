@@ -1,0 +1,10 @@
+{
+  "name": "fourier_explainer",
+  "title": "Fourier Harmonic Decomposition",
+  "format": "horizontal",
+  "aspect_ratio": "16:9",
+  "resolution": [1920, 1080],
+  "fps": 60,
+  "engine": "manimce",
+  "created_at": "2026-09-28T02:05:00Z"
+}

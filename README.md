@@ -153,10 +153,16 @@ python scripts/animathor_cli.py stitch  <project_dir>/script.py             # Jo
 
 ---
 
-## 🎨 Production Templates Included
+## 🎨 Production Templates & Ready-to-Run Demos
 
-Animathor ships with battle-tested template architectures in [templates/](file:///D:/Projects/animathor/templates/):
+Animathor ships with battle-tested template architectures in [templates/](file:///D:/Projects/animathor/templates/) and complete, ready-to-run demo projects in [demos/](file:///D:/Projects/animathor/demos/):
 
+### 🌟 Complete Demos
+- **[01_fourier_explainer](demos/01_fourier_explainer/)**: Complete 16:9 widescreen YouTube explainer on Fourier harmonic decomposition and Gibbs overshoot with verified AV script and scene code.
+- **[02_gibbs_shorts](demos/02_gibbs_shorts/)**: High-retention 9:16 portrait video engineered for Shorts/Reels with top and bottom UI safe zone clearance and 6-word concise subtitles.
+- **[03_product_rule_derivation](demos/03_product_rule_derivation/)**: Step-by-step calculus formula morphing using `TransformMatchingTex`, synchronized side notes, and attention highlighting.
+
+### 📐 Template Architectures
 1. **[Horizontal Explainer (16:9)](templates/horizontal_explainer_ce.py)**: Multi-scene YouTube format with HUD overlays, theorem cards, and graph transformations.
 2. **[Vertical Short (9:16)](templates/vertical_shorts_ce.py)**: TikTok/Reels/Shorts format with UI safe margins, punchy pacing, and dynamic camera framing.
 3. **[Step-by-Step Math Derivation](templates/math_derivation_ce.py)**: Rigorous formula morphing using `TransformMatchingTex`, color-coded variables, and bounding highlights.
